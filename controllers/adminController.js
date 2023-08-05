@@ -10,9 +10,13 @@ module.exports = {
     res.render('admin/category/view_category', { category });
   },
   addCategory: async (req, res) => {
-    const { name } = req.body;
-    await Category.create({ name });
-    res.redirect('/admin/category');
+    try {
+      const { name } = req.body;
+      await Category.create({ name });
+      res.redirect('/admin/category');
+    } catch (error) {
+      res.redirect('/admin/category');
+    }
   },
   editCategory: async (req, res) => {
     const { id, name } = req.body;
@@ -23,7 +27,7 @@ module.exports = {
   },
   deleteCategory: async (req, res) => {
     const { id } = req.params;
-    const category = await Category.findOneAndDelete({ _id: id });
+    const category = await Category.findOne({ _id: id });
     await category.deleteOne();
     res.redirect('/admin/category');
   },
