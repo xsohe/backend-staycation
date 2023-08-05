@@ -53,4 +53,15 @@
   </div>
 </div>
 
-<%- include('../../partials/js.ejs') %> <%- include('add_modal.ejs') %>
+<%- include('../../partials/js.ejs') %> <%- include('add_modal.ejs') %> <%- include('edit_modal.ejs') %>
+
+<script>
+  $('#dataTable').on('click', '.button-update', function () {
+    let id = $(this).data('id');
+    let name = $(this).data('name');
+    $('.id').val(id);
+    $('.name').val(name);
+    // console.log(id + name);
+    $('#edit-modal').modal('show');
+  });
+</script>
