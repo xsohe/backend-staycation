@@ -2,7 +2,9 @@ const Category = require('../models/Category');
 
 module.exports = {
   viewDashboard: (req, res) => {
-    res.render('admin/dashboard/view_dashboard', { title: 'Staycation | Dashboard' });
+    res.render('admin/dashboard/view_dashboard', {
+      title: 'Staycation | Dashboard',
+    });
   },
   viewCategory: async (req, res) => {
     try {
@@ -10,7 +12,11 @@ module.exports = {
       const alertMessage = req.flash('alertMessage');
       const alertStatus = req.flash('alertStatus');
       const alert = { message: alertMessage, status: alertStatus };
-      res.render('admin/category/view_category', { category, alert, title: 'Staycation | Category' });
+      res.render('admin/category/view_category', {
+        category,
+        alert,
+        title: 'Staycation | Category',
+      });
     } catch (error) {
       res.redirect('/admin/category');
     }
@@ -58,12 +64,18 @@ module.exports = {
     }
   },
   viewBank: (req, res) => {
-    res.render('admin/bank/view_bank', { title: 'Staycation | Bank' });
+    res.render('admin/bank/view_bank', {
+      title: 'Staycation | Bank',
+    });
   },
   viewItem: (req, res) => {
-    res.render('admin/item/view_item', { title: 'Staycation | Item' });
+    res.render('admin/item/view_item', {
+      title: 'Staycation | Item',
+    });
   },
   vieBooking: (req, res) => {
-    res.render('admin/booking/view_booking', { title: 'Staycation | Booking' });
+    res.render('admin/booking/view_booking', {
+      title: 'Staycation | Booking',
+    });
   },
 };
