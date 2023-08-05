@@ -21,6 +21,12 @@ module.exports = {
     await category.save();
     res.redirect('/admin/category');
   },
+  deleteCategory: async (req, res) => {
+    const { id } = req.params;
+    const category = await Category.findOneAndDelete({ _id: id });
+    await category.deleteOne();
+    res.redirect('/admin/category');
+  },
   viewBank: (req, res) => {
     res.render('admin/bank/view_bank');
   },
