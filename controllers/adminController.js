@@ -281,6 +281,33 @@ module.exports = {
     }
   },
 
+  deleteItem: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const item = await Item.findOne({ _id: id }).populate('imageId');
+      for (let i = 0; i < item.imageId.length; i++) {
+        Image.findOne({ _id: item.imageId[i]._id })
+          .then((image) => {
+            fs.unlink(path.join(`public/${image.imageUrl}`));
+            image.deleteOne();
+          })
+          .catch((error) => {
+            req.flash('alerMessage', `${error.message}`);
+            req.flash('alertStatus', 'danger');
+            res.redirect('/admin/item');
+          });
+      }
+      await item.deleteOne();
+      req.flash('alertMessage', 'Success Delete Item');
+      req.flash('alertStatus', 'success');
+      res.redirect('/admin/item');
+    } catch (error) {
+      req.flash('alerMessage', `${error.message}`);
+      req.flash('alertStatus', 'danger');
+      res.redirect('/admin/item');
+    }
+  },
+
   vieBooking: (req, res) => {
     res.render('admin/booking/view_booking', {
       title: 'Staycation | Booking',
