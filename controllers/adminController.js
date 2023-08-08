@@ -159,6 +159,7 @@ module.exports = {
         category,
         alert,
         item,
+        action: 'view',
       });
     } catch (error) {
       req.flash('alerMessage', `${error.message}`);
@@ -192,7 +193,27 @@ module.exports = {
         res.redirect('/admin/item');
       }
     } catch (error) {
-      console.log(error);
+      req.flash('alerMessage', `${error.message}`);
+      req.flash('alertStatus', 'danger');
+      res.redirect('/admin/item');
+    }
+  },
+
+  showImage: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const item = await Item.findOne({ _id: id }).populate({ path: 'imageId', select: 'id imageUrl' }).populate({ path: 'categoryId', select: 'id name' });
+      console.log(item.imageId);
+      const alertMessage = req.flash('alertMessage');
+      const alertStatus = req.flash('alertStatus');
+      const alert = { message: alertMessage, status: alertStatus };
+      res.render('admin/item/view_item', {
+        title: 'Staycation | Show Image Item',
+        alert,
+        item,
+        action: 'show image',
+      });
+    } catch (error) {
       req.flash('alerMessage', `${error.message}`);
       req.flash('alertStatus', 'danger');
       res.redirect('/admin/item');
