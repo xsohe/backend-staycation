@@ -4,7 +4,6 @@ const Item = require('../models/Item');
 const Image = require('../models/Image');
 const fs = require('fs-extra');
 const path = require('path');
-const { log, error } = require('console');
 
 module.exports = {
   viewDashboard: (req, res) => {
@@ -305,6 +304,23 @@ module.exports = {
       req.flash('alerMessage', `${error.message}`);
       req.flash('alertStatus', 'danger');
       res.redirect('/admin/item');
+    }
+  },
+
+  viewDetailItem: async (req, res) => {
+    const { itemId } = req.params;
+    try {
+      const alertMessage = req.flash('alertMessage');
+      const alertStatus = req.flash('alertStatus');
+      const alert = { message: alertMessage, status: alertStatus };
+      res.render('admin/item/detail_item/view_detail_item', {
+        title: 'Staycation | Detail Item',
+        alert,
+      });
+    } catch (error) {
+      req.flash('alerMessage', `${error.message}`);
+      req.flash('alertStatus', 'danger');
+      res.redirect(`/admin/item/show-detail-item/${itemId}`);
     }
   },
 
