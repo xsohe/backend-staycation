@@ -15,10 +15,14 @@ module.exports = {
       const alertMessage = req.flash('alertMessage');
       const alertStatus = req.flash('alertStatus');
       const alert = { message: alertMessage, status: alertStatus };
-      res.render('index', {
-        alert,
-        title: 'Staycation | Login',
-      });
+      if (req.session.user === null || req.session.user === undefined) {
+        res.render('index', {
+          alert,
+          title: 'Staycation | Login',
+        });
+      } else {
+        res.redirect('/admin/dashboard');
+      }
     } catch (error) {
       res.redirect('/admin/signin');
     }
@@ -26,18 +30,24 @@ module.exports = {
   actionSignin: async (req, res) => {
     try {
       const { username, password } = req.body;
-      const users = await Users.findOne({ username: username });
-      if (!users) {
+      const user = await Users.findOne({ username: username });
+      if (!user) {
         req.flash('alertMessage', 'User yang anda masukan tidak ada!!!');
         req.flash('alertStatus', 'danger');
         return res.redirect('/admin/signin');
       }
-      const isPasswordMatch = await bcrypt.compare(password, users.password);
+      const isPasswordMatch = await bcrypt.compare(password, user.password);
       if (!isPasswordMatch) {
         req.flash('alertMessage', 'Password yang anda masukan salah!!!');
         req.flash('alertStatus', 'danger');
         return res.redirect('/admin/signin');
       }
+
+      req.session.user = {
+        id: user,
+        username: user.username,
+      };
+
       res.redirect('/admin/dashboard');
     } catch (error) {
       return res.redirect('/admin/signin');
