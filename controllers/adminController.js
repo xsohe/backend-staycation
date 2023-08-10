@@ -469,6 +469,7 @@ module.exports = {
     const { id, itemId } = req.params;
     try {
       const activity = await Activity.findOne({ _id: id });
+
       const item = await Item.findOne({ _id: itemId }).populate('activityId');
       for (let i = 0; i < item.activityId.length; i++) {
         if (item.activityId[i]._id.toString() === activity._id.toString()) {
