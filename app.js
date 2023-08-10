@@ -12,7 +12,7 @@ const flash = require('connect-flash');
 
 // import mongoose / create connection mongoosejs
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1:27017/db_mern');
+mongoose.connect('mongodb://127.0.0.1:27017/db_mern', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false });
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');

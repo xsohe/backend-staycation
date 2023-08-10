@@ -4,10 +4,45 @@ const Item = require('../models/Item');
 const Image = require('../models/Image');
 const Feature = require('../models/Feature');
 const Activity = require('../models/Activity');
+const Users = require('../models/Users');
 const fs = require('fs-extra');
 const path = require('path');
+const bcrypt = require('bcryptjs');
 
 module.exports = {
+  viewSignin: async (req, res) => {
+    try {
+      const alertMessage = req.flash('alertMessage');
+      const alertStatus = req.flash('alertStatus');
+      const alert = { message: alertMessage, status: alertStatus };
+      res.render('index', {
+        alert,
+        title: 'Staycation | Login',
+      });
+    } catch (error) {
+      res.redirect('/admin/signin');
+    }
+  },
+  actionSignin: async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      const users = await Users.findOne({ username: username });
+      if (!users) {
+        req.flash('alertMessage', 'User yang anda masukan tidak ada!!!');
+        req.flash('alertStatus', 'danger');
+        return res.redirect('/admin/signin');
+      }
+      const isPasswordMatch = await bcrypt.compare(password, users.password);
+      if (!isPasswordMatch) {
+        req.flash('alertMessage', 'Password yang anda masukan salah!!!');
+        req.flash('alertStatus', 'danger');
+        return res.redirect('/admin/signin');
+      }
+      res.redirect('/admin/dashboard');
+    } catch (error) {
+      return res.redirect('/admin/signin');
+    }
+  },
   viewDashboard: (req, res) => {
     res.render('admin/dashboard/view_dashboard', {
       title: 'Staycation | Dashboard',
@@ -338,7 +373,7 @@ module.exports = {
       if (!req.file) {
         req.flash('alertMessage', 'Image not found');
         req.flash('alertStatus', 'success');
-        res.redirect(`/admin/item/show-detail-item/${itemId}`);
+        return res.redirect(`/admin/item/show-detail-item/${itemId}`);
       }
       const feature = await Feature.create({
         name,
@@ -416,7 +451,7 @@ module.exports = {
       if (!req.file) {
         req.flash('alertMessage', 'Image not found');
         req.flash('alertStatus', 'success');
-        res.redirect(`/admin/item/show-detail-item/${itemId}`);
+        return res.redirect(`/admin/item/show-detail-item/${itemId}`);
       }
       const activity = await Activity.create({
         name,
