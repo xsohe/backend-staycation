@@ -2,7 +2,7 @@ const Item = require('../models/Item');
 const Traveler = require('../models/Booking');
 const Treasure = require('../models/Activity');
 const Category = require('../models/Category');
-
+const Bank = require('../models/Bank');
 module.exports = {
   landingPage: async (req, res) => {
     try {
@@ -62,5 +62,30 @@ module.exports = {
       console.log(error);
       res.status(500).json({ message: 'Internal server error' });
     }
+  },
+
+  detailPage: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const item = await Item.findOne({ _id: id }).populate({ path: 'featureId', select: 'id name qty imageUrl' }).populate({ path: 'activityId', select: 'id name type imageUrl' }).populate({ path: 'imageId', select: 'id imageUrl' });
+
+      const bank = await Bank.find();
+
+      const testimonial = {
+        _id: 'asd1293uasdads1',
+        imageUrl: 'images/testimonial2.jpg',
+        name: 'Happy Family',
+        rate: 4.23,
+        content: 'What a great trip with my family and i should try again next time soon...',
+        familyName: 'Angga',
+        familyOccupation: 'Product Designer',
+      };
+
+      res.status(200).json({
+        ...item._doc,
+        bank,
+        testimonial,
+      });
+    } catch (error) {}
   },
 };
