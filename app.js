@@ -17,8 +17,8 @@ mongoose.connect('mongodb://127.0.0.1:27017/db_mern', { useNewUrlParser: true, u
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 // admin router
-var adminRouter = require('./routes/admin');
-
+const adminRouter = require('./routes/admin');
+const apiController = require('./routes/api');
 var app = express();
 
 // view engine setup
@@ -51,6 +51,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 // admin
 app.use('/admin', adminRouter);
+app.use('/api/v1/member', apiController);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
