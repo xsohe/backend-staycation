@@ -86,6 +86,33 @@ module.exports = {
         bank,
         testimonial,
       });
-    } catch (error) {}
+    } catch (error) {
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  },
+
+  bookingPage: async (req, res) => {
+    const { idItem, duration, bookingStartDate, bookingEndDate, firstName, lastName, email, phoneNumber, accountHolder, bankFrom } = req.body;
+
+    if (!req.file) {
+      return res.status(404).json({ message: 'Image not found' });
+    }
+
+    if (
+      idItem === undefined ||
+      duration === undefined ||
+      bookingStartDate === undefined ||
+      bookingEndDate === undefined ||
+      firstName === undefined ||
+      lastName === undefined ||
+      email === undefined ||
+      phoneNumber === undefined ||
+      accountHolder === undefined ||
+      bankFrom == undefined
+    ) {
+      return res.status(404).json({ message: 'Lengkapi semua field' });
+    }
+
+    res.status(200).json({ message: 'Success booking' });
   },
 };
