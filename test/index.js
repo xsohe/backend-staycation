@@ -3,7 +3,6 @@ const chaiHttp = require('chai-http');
 const expect = chai.expect;
 const app = require('../app');
 const fs = require('fs');
-const { log } = require('console');
 
 chai.use(chaiHttp);
 
@@ -66,12 +65,12 @@ describe('API ENDPOINT TESTING', () => {
       image,
       idItem: '5e96cbe292b97300fc902222',
       duration: 2,
-      bookingStartDate: '9-12-2020',
-      bookingEndDate: '11-12-2020',
+      bookingStartDate: '7-12-2023',
+      bookingEndDate: '10-12-2023',
       firstName: 'raka',
-      lastName: 'budi',
+      lastName: 'putra',
       email: 'raka@gmail.com',
-      phoneNumber: '08150001111',
+      phoneNumber: '081211112020',
       accountHolder: 'raka',
       bankFrom: 'BCA',
     };
@@ -100,7 +99,6 @@ describe('API ENDPOINT TESTING', () => {
         expect(res.body.booking).to.have.all.keys('payments', '_id', 'invoice', 'bookingStartDate', 'bookingEndDate', 'total', 'itemId', 'memberId', '__v');
         expect(res.body.booking.payments).to.have.all.keys('status', 'proofPayment', 'bankFrom', 'accountHolder');
         expect(res.body.booking.itemId).to.have.all.keys('_id', 'title', 'price', 'duration');
-        console.log(res.body.booking);
         done();
       });
   });
