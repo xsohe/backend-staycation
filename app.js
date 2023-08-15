@@ -9,6 +9,7 @@ const methodOverride = require('method-override');
 // import express-session & connect flash for adding alert message
 const session = require('express-session');
 const flash = require('connect-flash');
+const cors = require('cors');
 
 // import mongoose / create connection mongoosejs
 const mongoose = require('mongoose');
@@ -25,6 +26,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(methodOverride('_method'));
+app.use(cors());
 
 // use express session
 app.use(
